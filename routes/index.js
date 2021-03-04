@@ -1,8 +1,16 @@
 const express = require('express');
-const Router = express.Router();
+const router = express.Router();
 
-Router.get('/', (req, res) => {
-    res.send({hi: ":)"})
-})
+module.exports = function(db){
+    router.get('/', (req, res) => {
+        db.query(' SELECT * FROM todo ', (err, rows) => {
+            if(err){
+                throw err
+            }
+            console.log(rows)
+        })
+        res.send({hi: ":)"})
+    })
 
-module.exports = Router;
+    return router;
+}
