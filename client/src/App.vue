@@ -1,60 +1,56 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
+    <v-row justify="center" class="txt-ctn">
+      <v-col cols="8">
+        <div class="display-3">Todo App</div>
+        <div class="title">🚀 Check out the <a href="#">source code</a></div>
+      </v-col>
+    </v-row>
 
     <v-main>
-      <HelloWorld/>
+      <Todos/>
     </v-main>
+
+    <!-- Absolute position -->
+    <AddTodo/>
+    
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import Todos from './components/Todos';
+import AddTodo from './components/AddTodo';
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+    Todos,
+    AddTodo,
   },
 
-  data: () => ({
+  data: ()=> ({
     //
   }),
+
+  methods: {
+    //
+  }
 };
 </script>
+
+<style lang="scss" scoped>
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+.v-application {
+  font-family: 'Quicksand', sans-serif;
+  background-color: #EDEEEF !important;
+
+  .txt-ctn{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+}
+
+</style>
