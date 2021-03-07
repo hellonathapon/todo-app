@@ -18,16 +18,26 @@ export default new Vuex.Store({
         isDone: false,
         ...payload
       }
-      console.log(newTodo)
       state.todos = [
         ...state.todos,
         newTodo
       ]
+    },
+    MARK_AS_DONE: function(state, payload){
+      console.log(payload)
+      state.todos.map(k => {
+        if(k.id === payload.id){
+          return k.isDone = !k.isDone
+        }
+      })
     }
   },
   actions: {
     addTodo: function(context, payload){
       context.commit("ADD_TODO", payload)
+    },
+    markAsDone: function(context, payload){
+      context.commit("MARK_AS_DONE", payload)
     }
   },
 })

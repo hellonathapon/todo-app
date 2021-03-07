@@ -2,26 +2,26 @@
   <v-container>
     <v-row class="text-center" justify="center">
       <v-col cols="10">
-        <v-card outlined v-for="i in getTodos" class="todo-card pa-3" :key="i.id">
+        <v-card 
+          outlined 
+          v-for="i in getTodos" 
+          class="todo-card pa-3" 
+          :key="i.id"
+          v-on:click="markAsDone(i.id)">
           
-          <!-- <div style="display: flex; background: pink;"> -->
-            <div class="flex-box">
-              <v-icon>
-                mdi-check-circle-outline
-              </v-icon>
-              <p>{{i.text}}</p>
-            </div>
-          <!-- </div> -->
-          <div>
-            <p>{{i.date}}</p>
+          <div class="flex-box">
+            <v-icon>
+              mdi-check-circle-outline
+            </v-icon>
+            <p v-bind:class="{ done: i.isDone }">{{i.text}}</p>
+          </div>
 
-<!-- TODO: condition display on toggle todo -->
-            <!-- <v-btn
-              icon
-              color="error"
-            >
+          <div>
+          <!--conditional display on toggle todo -->
+            <v-btn v-if="i.isDone" icon color="error">
               <v-icon>mdi-trash-can-outline</v-icon>
-            </v-btn> -->
+            </v-btn>
+            <p v-else>{{i.date}}</p>
           </div>
         </v-card>
       </v-col>
@@ -34,6 +34,11 @@
     name: 'Todos',
     data: () => ({
     }),
+    methods: {
+      markAsDone(id){
+        this.$store.dispatch('markAsDone', {id})
+      }
+    },
     computed: {
       getTodos: function(){
         return this.$store.state.todos;
@@ -49,10 +54,6 @@
   justify-content: space-between;
   align-items: center;
   transition: all .1s ease-in-out;
-
-  &:hover{
-    background: #F5F5F5;
-  }
 
 // FIX: no space between words
   p{
@@ -75,6 +76,11 @@
     p{
       margin: auto .5rem;
     }
+  }
+
+  .done{
+    text-decoration: line-through;
+    color: crimson;
   }
 }
 </style>
