@@ -24,12 +24,10 @@ export default new Vuex.Store({
       ]
     },
     MARK_AS_DONE: function(state, payload){
-      console.log(payload)
-      state.todos.map(k => {
-        if(k.id === payload.id){
-          return k.isDone = !k.isDone
-        }
-      })
+      state.todos.map(k => k.id === payload.id ? k.isDone = !k.isDone: k)
+    },
+    DELETE_TODO: function(state, payload){
+      state.todos = state.todos.filter(k => k.id !== payload.id)
     }
   },
   actions: {
@@ -38,6 +36,9 @@ export default new Vuex.Store({
     },
     markAsDone: function(context, payload){
       context.commit("MARK_AS_DONE", payload)
+    },
+    deleteTodo: function(context, payload){
+      context.commit("DELETE_TODO", payload)
     }
   },
 })

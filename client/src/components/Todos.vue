@@ -2,26 +2,32 @@
   <v-container>
     <v-row class="text-center" justify="center">
       <v-col cols="10">
+        <p v-if="!getTodos.length">YAY! No Todo :)</p>
         <v-card 
-          outlined 
+          v-else
           v-for="i in getTodos" 
           class="todo-card pa-3" 
           :key="i.id"
-          v-on:click="markAsDone(i.id)">
+          v-on:click="markAsDone(i.id)"
+          outlined 
+          >
           
           <div class="flex-box">
-            <v-icon>
+            <v-icon >
               mdi-check-circle-outline
             </v-icon>
-            <p v-bind:class="{ done: i.isDone }">{{i.text}}</p>
+            <div class="flex-column">
+              <p class="text-center" v-bind:class="{ done: i.isDone }">{{i.text}}</p>
+              <small >{{i.creator}}</small>
+            </div>
           </div>
 
           <div>
           <!--conditional display on toggle todo -->
             <v-btn v-if="i.isDone" icon color="error">
-              <v-icon>mdi-trash-can-outline</v-icon>
+              <v-icon v-on:click="deleteTodo(i.id)" class="absl-pos">mdi-trash-can-outline</v-icon>
             </v-btn>
-            <p v-else>{{i.date}}</p>
+            <p class="text-center" v-else>{{i.date}}</p>
           </div>
         </v-card>
       </v-col>
@@ -37,6 +43,9 @@
     methods: {
       markAsDone(id){
         this.$store.dispatch('markAsDone', {id})
+      },
+      deleteTodo(id){
+        this.$store.dispatch('deleteTodo', {id})
       }
     },
     computed: {
@@ -68,14 +77,24 @@
     word-break: break-all;
     white-space: normal;
   }
+  .text-center{
+    margin: auto 0;
+  }
 
   .flex-box{
     display: flex;
     justify-content: center !important;
     align-items: center !important;
-    p{
-      margin: auto .5rem;
-    }
+  }
+  .flex-column{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-left: .5rem;
+  }
+  .absl-pos{
+    z-index: 100;
   }
 
   .done{
