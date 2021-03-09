@@ -17,7 +17,7 @@
               mdi-check-circle-outline
             </v-icon>
             <div class="flex-column">
-              <p class="text-center" v-bind:class="{ done: i.isDone }">{{i.text}}</p>
+              <p class="text-center" v-bind:class="{ done: i.isDone }">{{i.todo_text}}</p>
               <small >{{i.creator}}</small>
             </div>
           </div>
@@ -51,8 +51,8 @@
     computed: {
       getTodos: function(){
         return this.$store.state.todos;
-      }
-    }
+      },
+    },
   }
 </script>
 

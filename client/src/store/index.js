@@ -1,17 +1,17 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    todos: [
-      { id: 1, text: 'buy milk', isDone: false, creator: 'Nathapon', date: '3/6/21' },
-      { id: 2, text: 'buy Shirt', isDone: false, creator: 'Nathapon', date: '3/6/21' },
-      { id: 3, text: 'Jogging', isDone: false, creator: 'Nathapon', date: '3/6/21' }
-    ]
+    todos: []
   },
   mutations: {
+    FETCH_TODOS: function(state, payload){
+      state.todos = payload;
+    },
     ADD_TODO: function(state, payload){
       const newTodo = {
         id: Date.now(),
@@ -31,6 +31,14 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    fetchTodos: function(context){  //auto trigger when app component is mounted. 
+      axios.get('http://localhost:5000/')
+      .then(data => {
+        console.log(data.data)
+        context.commit("FETCH_TODOS", data.data);
+      })
+      .catch(err => console.error(err));
+    },
     addTodo: function(context, payload){
       context.commit("ADD_TODO", payload)
     },
