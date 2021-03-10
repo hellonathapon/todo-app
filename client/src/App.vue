@@ -1,18 +1,16 @@
 <template>
   <v-app>
 
-    <v-row justify="center" class="txt-ctn">
+    <v-row justify="center" class="mt-5">
       <v-col cols="8">
         <div class="display-3">Todo App</div>
-        <div class="title">🚀 Check out the <a href="#">source code</a></div>
+        <div class="title">🚀 Check out the <a href="https://github.com/hellonathapon/todo-app" target="_blank">source code</a></div>
       </v-col>
     </v-row>
 
     <v-main>
       <Todos/>
     </v-main>
-
-    <!-- Absolute position -->
     <AddTodo/>
     
   </v-app>
@@ -29,16 +27,8 @@ export default {
     Todos,
     AddTodo,
   },
-
-  data: ()=> ({
-    //
-  }),
-
-  methods: {
-    //
-  },
   mounted(){
-    this.$store.dispatch('fetchTodos');
+    this.$store.dispatch('fetchTodos');  // initially fetch Todos from server.
   }
 };
 </script>
@@ -48,12 +38,5 @@ export default {
 .v-application {
   font-family: 'Quicksand', sans-serif;
   background-color: #EDEEEF !important;
-
-  .txt-ctn{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-  }
 }
-
 </style>

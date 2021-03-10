@@ -3,7 +3,7 @@
       <v-dialog v-model="dialog" width="500">
 
         <template v-slot:activator="{ on, attrs }">
-          <v-btn color="primary" fab large dark v-bind="attrs" v-on="on" class="toggle-icon">
+          <v-btn color="primary" class="toggle-icon" fab large dark v-bind="attrs" v-on="on">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </template>
@@ -96,25 +96,27 @@ export default {
 
   methods: {
     submitTodo(){
-      if(this.$refs.form.validate()){
+      if(this.$refs.form.validate()){  // check form validation.
         this.$store.dispatch('addTodo', {
-          text: this.input.text,
+          todo_text: this.input.text,
           creator: this.input.creator,
           date: this.input.date,
+          isDone: 0,
         })
-        // interact with VUEX return a Promise so close the dialog if everything is fine
-        this.dialog = false
+          .then(() => {
+            this.dialog = false
+          })
+          .catch(err => console.error(err));    
       }      
     },
   }
-
 }
 </script>
 
 <style scoped lang="scss">
 .toggle-icon{
     position: fixed;
-    right: 1rem;
-    bottom: 1rem;
+    right: 3rem;
+    bottom: 3rem;
 }
 </style>

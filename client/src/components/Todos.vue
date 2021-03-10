@@ -12,11 +12,11 @@
           outlined 
           >
           
-          <div class="flex-box">
+          <div class="d-flex">
             <v-icon >
               mdi-check-circle-outline
             </v-icon>
-            <div class="flex-column">
+            <div class="d-flex flex-column align-start ml-3">
               <p class="text-center" v-bind:class="{ done: i.isDone }">{{i.todo_text}}</p>
               <small >{{i.creator}}</small>
             </div>
@@ -25,7 +25,7 @@
           <div>
           <!--conditional display on toggle todo -->
             <v-btn v-if="i.isDone" icon color="error">
-              <v-icon v-on:click="deleteTodo(i.id)" class="absl-pos">mdi-trash-can-outline</v-icon>
+              <v-icon v-on:click="deleteTodo(i.id)">mdi-trash-can-outline</v-icon>
             </v-btn>
             <p class="text-center" v-else>{{i.date}}</p>
           </div>
@@ -64,7 +64,10 @@
   align-items: center;
   transition: all .1s ease-in-out;
 
-// FIX: no space between words
+/**
+* Just in case user insert long word for testing or no reason ¯\_(ツ)_/¯
+* that gonna mess up card layout So this fix it.
+*/
   p{
     overflow-wrap: break-word !important;
     word-wrap: break-word !important;
@@ -79,22 +82,6 @@
   }
   .text-center{
     margin: auto 0;
-  }
-
-  .flex-box{
-    display: flex;
-    justify-content: center !important;
-    align-items: center !important;
-  }
-  .flex-column{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    margin-left: .5rem;
-  }
-  .absl-pos{
-    z-index: 100;
   }
 
   .done{
