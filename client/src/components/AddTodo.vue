@@ -27,10 +27,7 @@
                   placeholder="John Doe"
                   required
             ></v-text-field>
-          </v-form>
-        
-        <!-- datepicker -->
-          <v-col cols="12">
+          <!-- Datepicker -->
             <v-menu
                 v-model="datepickerMenu"
                 :close-on-content-click="false"
@@ -41,11 +38,12 @@
             >
                 <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                    class="pl-3 pr-3"
+                    ref="date"
                     v-model="input.date"
                     label="Due date"
                     prepend-icon="mdi-calendar"
                     readonly
+                    :rules="rules.dateRule"
                     v-bind="attrs"
                     v-on="on"
                 ></v-text-field>
@@ -55,8 +53,8 @@
                 @input="menu2 = false"
                 ></v-date-picker>
             </v-menu>
-            </v-col>
-
+          </v-form>
+        
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn
@@ -94,6 +92,9 @@ export default {
             creatorRule: [
               v => !!v || 'Creator name is required',
             ],
+            dateRule: [
+              v => !!v || 'Due date is required',
+            ]
         }
   }),
 
@@ -101,6 +102,7 @@ export default {
     submitTodo(){
       if(this.$refs.form.validate()){  // check form validation.
           this.btnLoading = true
+          // console.log(this.input.date)
           this.$store.dispatch('addTodo', 
             {
               todo_text: this.input.text,

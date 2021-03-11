@@ -46,7 +46,16 @@
       },
       deleteTodo(id){
         this.$store.dispatch('deleteTodo', {id})
-      }
+      },
+      /**
+       * @COMPARE DATE FEATURE.
+       * compare todo overdue date with today. 
+       */
+      // compareDates: function(dateString){              
+      //   const today = new Date().getTime()
+      //   const todoDate = new Date(dateString).getTime();
+      //   return todoDate < today;
+      // }
     },
     computed: {
       getTodos: function(){
@@ -97,5 +106,8 @@
     text-decoration: line-through;
     color: crimson;
   }
+  /* .overdueText{
+    color: crimson;
+  } */
 }
 </style>
