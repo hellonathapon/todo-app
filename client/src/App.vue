@@ -1,12 +1,14 @@
 <template>
   <v-app>
 
-    <v-row justify="center" class="mt-5">
-      <v-col cols="8">
-        <div class="display-3">Todo App</div>
-        <div class="title">🚀 Check out the <a href="https://github.com/hellonathapon/todo-app" target="_blank">source code</a></div>
-      </v-col>
-    </v-row>
+    <v-container>
+      <v-row justify="center" class="mt-5">
+        <v-col cols="12" lg="10">
+          <div class="display-3">Todo App</div>
+          <div class="title">🚀 Check out the <a href="https://github.com/hellonathapon/todo-app" target="_blank">source code</a></div>
+        </v-col>
+      </v-row>
+    </v-container>
 
     <v-main>
       <Todos/>
