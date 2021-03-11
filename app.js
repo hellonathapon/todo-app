@@ -3,6 +3,7 @@ const app = express()
 const port = process.env.PORT || 5000;
 const db = require('./config/db');
 const bodyParser = require('body-parser');
+const errorHandler = require('./config/errorHandler');
 require('dotenv').config();
 
 // CORS middleware
@@ -16,7 +17,10 @@ app.use(function (req, res, next) {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-// route
+// Route
 app.use('/', require('./routes')(db))
+
+// Error handling middleware
+app.use(errorHandler)
 
 app.listen(port, console.log(`🚀 Server is running on port ${port}`));

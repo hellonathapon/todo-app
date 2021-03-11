@@ -11,7 +11,26 @@
     <v-main>
       <Todos/>
     </v-main>
+
     <AddTodo/>
+
+    <v-snackbar
+      v-model="snackbar"
+    >
+      {{ errMessage }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="pink"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
+
     
   </v-app>
 </template>
@@ -23,12 +42,23 @@ import AddTodo from './components/AddTodo';
 export default {
   name: 'App',
 
+  data: () => ({
+    snackbar: false,
+    errMessage: '',
+  }),
+
   components: {
     Todos,
     AddTodo,
   },
   mounted(){
-    this.$store.dispatch('fetchTodos');  // initially fetch Todos from server.
+    this.$store.dispatch('fetchTodos') // initially fetch Todos from server.
+      .then(() => this.snackbar = false)
+      .catch(err => {
+        console.log(err)
+        this.errMessage = err
+        this.snackbar = true
+      });
   }
 };
 </script>

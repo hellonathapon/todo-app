@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="text-center" justify="center">
       <v-col cols="10">
-        <p v-if="!getTodos.length">YAY! No Todo :)</p>
+        <p v-if="!getTodos.length">No Todo :)</p>
         <v-card 
           v-else
           v-for="i in getTodos" 

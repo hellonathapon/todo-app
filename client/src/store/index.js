@@ -32,12 +32,14 @@ export default new Vuex.Store({
 
   actions: {
     fetchTodos: function(context){  //auto triggering when app component is mounted. 
-      axios.get('http://localhost:5000/')
-      .then(data => {
-        console.log(data.data)
-        context.commit("FETCH_TODOS", data.data);
-      })
-      .catch(err => console.error(err));
+      return new Promise((resolve, reject) => {
+        axios.get('http://localhost:5000/')
+        .then(data => {
+          context.commit("FETCH_TODOS", data.data);
+          resolve(data)
+        })
+        .catch(err => reject(err));
+        })
     },
 
     addTodo: function(context, payload){
