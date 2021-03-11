@@ -9,7 +9,7 @@
         </template>
 
         <v-card>
-          <v-card-title class="headline grey lighten-2">TODO</v-card-title>
+          <v-card-title class="headline">TODO</v-card-title>
           <v-form class="px-6" ref="form" v-model="formValid">
             <v-text-field
                   ref="todo"
@@ -41,6 +41,7 @@
             >
                 <template v-slot:activator="{ on, attrs }">
                 <v-text-field
+                    class="pl-3 pr-3"
                     v-model="input.date"
                     label="Due date"
                     prepend-icon="mdi-calendar"
@@ -60,6 +61,7 @@
             <v-spacer></v-spacer>
             <v-btn
               color="primary"
+              :loading="btnLoading"
               text
               @click="submitTodo()"
             >
@@ -84,6 +86,7 @@ export default {
         dialog: false,
         formValid: false,
         datepickerMenu: false,
+        btnLoading: false,
         rules: {
             todoRule: [
               v => !!v || 'Todo is required',
@@ -97,16 +100,20 @@ export default {
   methods: {
     submitTodo(){
       if(this.$refs.form.validate()){  // check form validation.
-        this.$store.dispatch('addTodo', {
-          todo_text: this.input.text,
-          creator: this.input.creator,
-          date: this.input.date,
-          isDone: 0,
-        })
+          this.btnLoading = true
+          this.$store.dispatch('addTodo', 
+            {
+              todo_text: this.input.text,
+              creator: this.input.creator,
+              date: this.input.date,
+              isDone: 0,
+            }
+          )
           .then(() => {
+            this.btnLoading = false
             this.dialog = false
           })
-          .catch(err => console.error(err));    
+          .catch(() => this.btnLoading = false);    
       }      
     },
   }

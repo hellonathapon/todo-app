@@ -6,7 +6,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    todos: []
+    todos: [],
+    snackbar: {
+      status: false,
+      message: 'test'
+    }
   },
 
   mutations: {
@@ -27,19 +31,25 @@ export default new Vuex.Store({
 
     DELETE_TODO: function(state, payload){
       state.todos = state.todos.filter(k => k.id !== payload.id)
+    },
+
+    SET_SNACKBAR: function(state, payload){
+      state.snackbar = {
+        status: true,
+        message: payload
+      }
     }
   },
 
   actions: {
     fetchTodos: function(context){  //auto triggering when app component is mounted. 
-      return new Promise((resolve, reject) => {
-        axios.get('http://localhost:5000/')
-        .then(data => {
-          context.commit("FETCH_TODOS", data.data);
-          resolve(data)
-        })
-        .catch(err => reject(err));
-        })
+      axios.get('http://localhost:5000/')
+      .then(data => {
+        context.commit("FETCH_TODOS", data.data);
+      })
+      .catch(err => {
+          context.commit("SET_SNACKBAR", err.message) // display err message for UX :)
+      });
     },
 
     addTodo: function(context, payload){
@@ -50,7 +60,10 @@ export default new Vuex.Store({
             context.commit("ADD_TODO", newTodo) // add todo in local Vuex.
             resolve(res)
           })
-          .catch(err => reject(err));
+          .catch(err => {
+            context.commit("SET_SNACKBAR", err.message)
+            reject(err)
+          });
       })
     },
 
@@ -66,7 +79,10 @@ export default new Vuex.Store({
             context.commit("DELETE_TODO", payload);
             resolve(res);
           })
-          .catch(err => reject(err));
+          .catch(err => {
+            context.commit("SET_SNACKBAR", err.message)
+            reject(err)
+          });
       })
     }
   },

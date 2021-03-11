@@ -12,17 +12,17 @@
           outlined 
           >
           
-          <div class="d-flex">
+          <div class="d-flex left">
             <v-icon >
               mdi-check-circle-outline
             </v-icon>
             <div class="d-flex flex-column align-start ml-3">
-              <p class="text-center" v-bind:class="{ done: i.isDone }">{{i.todo_text}}</p>
+              <p class="text-center title" v-bind:class="{ done: i.isDone }">{{i.todo_text}}</p>
               <small >{{i.creator}}</small>
             </div>
           </div>
 
-          <div>
+          <div class="right">
           <!--conditional display on toggle todo -->
             <v-btn v-if="i.isDone" icon color="error">
               <v-icon v-on:click="deleteTodo(i.id)">mdi-trash-can-outline</v-icon>
@@ -59,10 +59,16 @@
 <style lang="scss" scoped>
 .todo-card {
   display: flex;
-  flex-flow: wrap row;
-  justify-content: space-between;
-  align-items: center;
   transition: all .1s ease-in-out;
+
+  .left{
+    flex: 3;
+  }
+  .right{
+    flex: 0.5;
+    display: flex;
+    justify-content: flex-end;
+  }
 
 /**
 * Just in case user insert long word for testing or no reason ¯\_(ツ)_/¯
@@ -82,6 +88,9 @@
   }
   .text-center{
     margin: auto 0;
+    text-align: center;
+    text-align-last: left;
+    font-weight: 400;
   }
 
   .done{
