@@ -44,7 +44,7 @@ export default new Vuex.Store({
     fetchTodos: function(context) {
       //auto triggering when app component is mounted.
       axios
-        .get(process.env.VUE_APP_SERVER_ENDPOINT)
+        .get(`${process.env.VUE_APP_SERVER_ENDPOINT}/todo`)
         .then((data) => {
           context.commit("FETCH_TODOS", data.data);
         })
@@ -57,7 +57,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios
           .post(
-            `${process.env.VUE_APP_SERVER_ENDPOINT}/add`,
+            `${process.env.VUE_APP_SERVER_ENDPOINT}/todo/add`,
             { credential: payload },
             { withCredentials: true }
           )
@@ -81,7 +81,7 @@ export default new Vuex.Store({
       console.log(payload);
       return new Promise((resolve, reject) => {
         axios
-          .delete(`${process.env.VUE_APP_SERVER_ENDPOINT}/delete`, {
+          .delete(`${process.env.VUE_APP_SERVER_ENDPOINT}/todo/delete`, {
             params: { credential: payload.id },
             headers: { Authorization: "authorizationToken" },
           })
