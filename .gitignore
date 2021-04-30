@@ -1,3 +1,4 @@
 /node_modules
 /*.env
 /STRATEGY.md
+/client
