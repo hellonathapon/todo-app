@@ -3,6 +3,7 @@
     <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
+          v-if="checkUser"
           class="toggle-icon"
           color="primary"
           dark
@@ -63,6 +64,11 @@ export default {
       dateRule: [(v) => !!v || "Due date is required"],
     },
   }),
+  computed: {
+    checkUser: function() {
+      return this.$store.state.authUser;
+    },
+  },
 
   methods: {
     submitTodo() {

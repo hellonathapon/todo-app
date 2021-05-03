@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    authUser: false,
     todos: [],
     snackbar: {
       status: false,
@@ -78,7 +79,6 @@ export default new Vuex.Store({
     },
 
     deleteTodo: function(context, payload) {
-      console.log(payload);
       return new Promise((resolve, reject) => {
         axios
           .delete(`${process.env.VUE_APP_SERVER_ENDPOINT}/todo/delete`, {
@@ -91,6 +91,20 @@ export default new Vuex.Store({
           })
           .catch((err) => {
             context.commit("SET_SNACKBAR", err.message);
+            reject(err);
+          });
+      });
+    },
+    submitRegisterForm: function(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.VUE_APP_SERVER_ENDPOINT}/user/register`, payload)
+          .then((res) => {
+            console.log(res);
+            resolve(res);
+          })
+          .catch((err) => {
+            console.error(err);
             reject(err);
           });
       });

@@ -5,3 +5,4 @@
 2021-05-03 07:48:37:4837 [31merror[39m: [31mgetaddrinfo ENOTFOUND localhost:3306[39m
 2021-05-03 07:49:00:490 [31merror[39m: [31mgetaddrinfo ENOTFOUND localhost:3306[39m
 2021-05-03 07:50:52:5052 [31merror[39m: [31mgetaddrinfo ENOTFOUND localhost:3306[39m
+2021-05-03 13:44:25:4425 [31merror[39m: [31mER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1[39m

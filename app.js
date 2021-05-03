@@ -26,6 +26,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // Route
 app.use("/todo", require("./routes")(db));
+app.use("/user", require("./routes/auth")(db));
 
 // Serve static vue built stuffs
 if (process.env.NODE_ENV === "production") {

@@ -1,10 +1,5 @@
 <template>
-  <v-app-bar
-    absolute
-    color="white"
-    elevate-on-scroll
-    scroll-target="#scrolling-techniques-7"
-  >
+  <v-app-bar color="white" absolute elevation="0">
     <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
 
     <v-btn to="/" color="white" elevation="0">
@@ -20,7 +15,7 @@
       Login
     </v-btn>
 
-    <v-avatar color="primary" size="40"
+    <v-avatar v-if="checkUser" color="primary" size="40"
       ><span class="white--text headline">TJ</span>
     </v-avatar>
 
@@ -28,11 +23,6 @@
       <v-icon>mdi-heart</v-icon>
     </v-btn>
   </v-app-bar>
-  <!-- <div id="nav">
-
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div> -->
 </template>
 
 <script>
@@ -40,11 +30,12 @@
 
 export default {
   name: "Navbar",
+  computed: {
+    checkUser: function() {
+      return this.$store.state.authUser;
+    },
+  },
 };
 </script>
 
-<style lang="scss" scoped>
-#nav {
-  background: pink;
-}
-</style>
+<style lang="scss" scoped></style>
