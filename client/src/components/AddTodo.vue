@@ -104,6 +104,7 @@ export default {
         // check form validation.
         this.btnLoading = true;
         // console.log(this.input.date)
+        console.log(new Date(this.input.date));
         this.$store
           .dispatch("addTodo", {
             text: this.input.text,
@@ -117,6 +118,50 @@ export default {
           })
           .catch(() => (this.btnLoading = false));
       }
+    },
+
+    formatDate() {
+      const today = "2021-05-02";
+      const n = new Date(today);
+      const daysOfWeek = ["a", "b", "c", "d", "e", "f", "r"];
+      const monthNames = [
+        "Jan",
+        "Fab",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+
+      const day = n.getDay();
+      let i = 0;
+      let dayOfToday = "";
+      while (i < daysOfWeek.length) {
+        if (day === i) {
+          dayOfToday = daysOfWeek[i];
+        }
+        i++;
+      }
+
+      let q = 0;
+      const date = n.getDate();
+      const month = n.getMonth();
+      let thisMonth = "";
+
+      while (q < monthNames.length) {
+        if (month === q) {
+          thisMonth = monthNames[q];
+        }
+        q++;
+      }
+
+      console.log(dayOfToday, date, thisMonth);
     },
   },
 };
