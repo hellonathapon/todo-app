@@ -1,8 +1,55 @@
 <template>
   <v-container>
     <v-row class="text-center" justify="center">
-      <v-col cols="12" lg="10">
-        <p v-if="!getTodos.length">No todo found :)</p>
+      <v-col cols="12" lg="12" style="margin-top: 100px;">
+        <v-list two-line>
+          <v-list-item-group active-class="pink--text" multiple>
+            <template v-for="(item, index) in items">
+              <v-list-item :key="item.title" style="text-align: start;">
+                <template v-slot:default="{ active }">
+                  <v-list-item-avatar style="margin-right: 15px;">
+                    <v-img :src="item.avatar"></v-img>
+                  </v-list-item-avatar>
+
+                  <v-list-item-content>
+                    <v-list-item-title v-text="item.title"></v-list-item-title>
+
+                    <v-list-item-subtitle
+                      class="text--primary"
+                      v-text="item.headline"
+                    ></v-list-item-subtitle>
+
+                    <v-list-item-subtitle
+                      v-text="item.subtitle"
+                    ></v-list-item-subtitle>
+                  </v-list-item-content>
+
+                  <v-list-item-action>
+                    <v-list-item-action-text
+                      v-text="item.action"
+                    ></v-list-item-action-text>
+
+                    <v-icon v-if="!active" color="grey lighten-1">
+                      mdi-checkbox-marked-circle-outline
+                    </v-icon>
+
+                    <v-icon v-else color="yellow darken-3">
+                      mdi-checkbox-marked-circle
+                    </v-icon>
+                  </v-list-item-action>
+                </template>
+              </v-list-item>
+
+              <v-divider
+                v-if="index < items.length - 1"
+                :key="index"
+              ></v-divider>
+            </template>
+          </v-list-item-group>
+        </v-list>
+      </v-col>
+
+      <!-- <p v-if="!getTodos.length">No todo found :)</p>
         <v-card
           v-else
           v-for="i in getTodos"
@@ -24,7 +71,6 @@
           </div>
 
           <div class="right">
-            <!--conditional display on toggle todo -->
             <v-btn v-if="i.isDone" icon color="error">
               <v-icon v-on:click="deleteTodo(i.id)"
                 >mdi-trash-can-outline</v-icon
@@ -32,8 +78,7 @@
             </v-btn>
             <p class="text-center" v-else>{{ i.date }}</p>
           </div>
-        </v-card>
-      </v-col>
+        </v-card> -->
     </v-row>
   </v-container>
 </template>
@@ -41,7 +86,44 @@
 <script>
 export default {
   name: "Todos",
-  data: () => ({}),
+  components: {},
+  data: () => ({
+    dialog: false,
+    items: [
+      {
+        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
+        title: "Brunch this weekend?",
+        subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
+        action: "23 June",
+      },
+      {
+        avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
+        title: "Summer BBQ",
+        subtitle: `Wish I could come, but I'm out of town this weekend.`,
+        action: "23 June",
+      },
+      {
+        avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
+        title: "Oui oui",
+        subtitle: "Do you have Paris recommendations? Have you ever been?",
+        action: "23 June",
+      },
+      {
+        avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
+        title: "Birthday gift",
+        subtitle:
+          "Have any ideas about what we should get Heidi for her birthday?",
+        action: "23 June",
+      },
+      {
+        avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
+        title: "Recipe to try",
+        subtitle:
+          "We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+        action: "23 June",
+      },
+    ],
+  }),
   methods: {
     markAsDone(id) {
       this.$store.dispatch("markAsDone", { id });

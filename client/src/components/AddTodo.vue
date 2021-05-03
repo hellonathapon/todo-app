@@ -3,74 +3,40 @@
     <v-dialog v-model="dialog" width="500">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          color="primary"
           class="toggle-icon"
-          fab
-          large
+          color="primary"
           dark
+          fab
           v-bind="attrs"
           v-on="on"
         >
-          <v-icon>mdi-plus</v-icon>
+          <v-icon>
+            mdi-plus
+          </v-icon>
         </v-btn>
       </template>
 
       <v-card>
-        <v-card-title class="headline">TODO</v-card-title>
-        <v-form class="px-6" ref="form" v-model="formValid">
-          <v-text-field
-            ref="todo"
-            v-model="input.text"
-            :rules="rules.todoRule"
-            label="Text"
-            placeholder="Todo"
-            required
-          ></v-text-field>
-          <v-text-field
-            ref="creator"
-            v-model="input.creator"
-            :rules="rules.creatorRule"
-            label="Creator"
-            placeholder="John Doe"
-            required
-          ></v-text-field>
-          <!-- Datepicker -->
-          <v-menu
-            v-model="datepickerMenu"
-            :close-on-content-click="false"
-            :nudge-right="40"
-            transition="scale-transition"
-            offset-y
-            min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                ref="date"
-                v-model="input.date"
-                label="Due date"
-                prepend-icon="mdi-calendar"
-                readonly
-                :rules="rules.dateRule"
-                v-bind="attrs"
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker
-              v-model="input.date"
-              @input="menu2 = false"
-            ></v-date-picker>
-          </v-menu>
-        </v-form>
+        <v-card-title>
+          Privacy Policy
+        </v-card-title>
+
+        <v-card-text>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </v-card-text>
+
+        <v-divider></v-divider>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            :loading="btnLoading"
-            text
-            @click="submitTodo()"
-          >
-            Submit
+          <v-btn color="primary" text @click="dialog = false">
+            I accept
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -120,49 +86,49 @@ export default {
       }
     },
 
-    formatDate() {
-      const today = "2021-05-02";
-      const n = new Date(today);
-      const daysOfWeek = ["a", "b", "c", "d", "e", "f", "r"];
-      const monthNames = [
-        "Jan",
-        "Fab",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
+    // formatDate() {
+    //   const today = "2021-05-02";
+    //   const n = new Date(today);
+    //   const daysOfWeek = ["a", "b", "c", "d", "e", "f", "r"];
+    //   const monthNames = [
+    //     "Jan",
+    //     "Fab",
+    //     "Mar",
+    //     "Apr",
+    //     "May",
+    //     "Jun",
+    //     "Jul",
+    //     "Aug",
+    //     "Sep",
+    //     "Oct",
+    //     "Nov",
+    //     "Dec",
+    //   ];
 
-      const day = n.getDay();
-      let i = 0;
-      let dayOfToday = "";
-      while (i < daysOfWeek.length) {
-        if (day === i) {
-          dayOfToday = daysOfWeek[i];
-        }
-        i++;
-      }
+    //   const day = n.getDay();
+    //   let i = 0;
+    //   let dayOfToday = "";
+    //   while (i < daysOfWeek.length) {
+    //     if (day === i) {
+    //       dayOfToday = daysOfWeek[i];
+    //     }
+    //     i++;
+    //   }
 
-      let q = 0;
-      const date = n.getDate();
-      const month = n.getMonth();
-      let thisMonth = "";
+    //   let q = 0;
+    //   const date = n.getDate();
+    //   const month = n.getMonth();
+    //   let thisMonth = "";
 
-      while (q < monthNames.length) {
-        if (month === q) {
-          thisMonth = monthNames[q];
-        }
-        q++;
-      }
+    //   while (q < monthNames.length) {
+    //     if (month === q) {
+    //       thisMonth = monthNames[q];
+    //     }
+    //     q++;
+    //   }
 
-      console.log(dayOfToday, date, thisMonth);
-    },
+    //   console.log(dayOfToday, date, thisMonth);
+    // },
   },
 };
 </script>
