@@ -1,8 +1,0 @@
-2021-04-30 12:55:12:5512 [31merror[39m: [31mMySQL error[39m
-2021-04-30 12:59:21:5921 [31merror[39m: [31mMySQL error[39m
-2021-05-02 15:07:33:733 [31merror[39m: [31mHandshake inactivity timeout[39m
-2021-05-02 15:11:56:1156 [31merror[39m: [31mMySQL error[39m
-2021-05-03 07:48:37:4837 [31merror[39m: [31mgetaddrinfo ENOTFOUND localhost:3306[39m
-2021-05-03 07:49:00:490 [31merror[39m: [31mgetaddrinfo ENOTFOUND localhost:3306[39m
-2021-05-03 07:50:52:5052 [31merror[39m: [31mgetaddrinfo ENOTFOUND localhost:3306[39m
-2021-05-03 13:44:25:4425 [31merror[39m: [31mER_PARSE_ERROR: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1[39m

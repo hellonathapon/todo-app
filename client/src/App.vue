@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <NavBar />
-    <router-view />
+    <transition name="fade" mode="out-in">
+      <router-view />
+    </transition>
   </v-app>
 </template>
 
@@ -36,5 +38,16 @@ export default {
       color: #42b983;
     }
   }
+}
+
+// page transition
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateX(2em);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.3s ease;
 }
 </style>

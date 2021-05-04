@@ -4,82 +4,85 @@
       <v-col cols="12" sm="10" md="8" lg="6">
         <!-- form -->
         <v-card ref="form">
-          <v-avatar color="indigo">
+          <v-avatar color="primary">
             <v-icon dark>
               mdi-account-circle
             </v-icon>
           </v-avatar>
+          <v-card-title class="text-center">REGISTER</v-card-title>
           <v-card-text>
-            <v-text-field
-              ref="firstName"
-              label="Firstname"
-              v-model="input.firstName"
-              required
-              counter="25"
-              :rules="[
-                () => !!input.firstName || 'This field is required',
-                () =>
-                  (!!input.firstName && input.firstName.length <= 25) ||
-                  'Firstname must be less than 25 characters',
-              ]"
-            ></v-text-field>
-            <v-text-field
-              ref="lastName"
-              label="Lastname"
-              v-model="input.lastName"
-              required
-              counter="25"
-              :rules="[
-                () => !!input.lastName || 'This field is required',
-                () =>
-                  (!!input.lastName && input.lastName.length <= 25) ||
-                  'Lastname must be less than 25 characters',
-              ]"
-            ></v-text-field>
-            <v-text-field
-              ref="email"
-              label="Email Address"
-              v-model="input.email"
-              required
-              :rules="[
-                () => !!input.email || 'This field is required',
-                (v) =>
-                  !v ||
-                  /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
-                  'E-mail must be valid',
-              ]"
-              placeholder="Example@email.com"
-            ></v-text-field>
-            <v-text-field
-              ref="password"
-              label="Password"
-              v-model="input.password"
-              required
-              :rules="[
-                () => !!input.password || 'This field is required',
-                (value) =>
-                  (value && value.length >= 5) ||
-                  'Password must contain atleast 5 characters',
-              ]"
-              @click:append="show1 = !show1"
-              :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show1 ? 'text' : 'password'"
-            ></v-text-field>
-            <v-text-field
-              ref="confirmPassword"
-              label="Confirm password"
-              v-model="input.confirmPassword"
-              required
-              :rules="[
-                () => !!input.confirmPassword || 'This field is required',
-                () =>
-                  input.password === input.confirmPassword ||
-                  'Password not match',
-              ]"
-              @click:append="show2 = !show2"
-              :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
-              :type="show2 ? 'text' : 'password'"
-            ></v-text-field>
+            <v-form v-model="isFormValid">
+              <v-text-field
+                ref="firstName"
+                label="Firstname"
+                v-model="input.firstName"
+                required
+                counter="25"
+                :rules="[
+                  () => !!input.firstName || 'This field is required',
+                  () =>
+                    (!!input.firstName && input.firstName.length <= 25) ||
+                    'Firstname must be less than 25 characters',
+                ]"
+              ></v-text-field>
+              <v-text-field
+                ref="lastName"
+                label="Lastname"
+                v-model="input.lastName"
+                required
+                counter="25"
+                :rules="[
+                  () => !!input.lastName || 'This field is required',
+                  () =>
+                    (!!input.lastName && input.lastName.length <= 25) ||
+                    'Lastname must be less than 25 characters',
+                ]"
+              ></v-text-field>
+              <v-text-field
+                ref="email"
+                label="Email Address"
+                v-model="input.email"
+                required
+                :rules="[
+                  () => !!input.email || 'This field is required',
+                  (v) =>
+                    !v ||
+                    /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) ||
+                    'E-mail must be valid',
+                ]"
+                placeholder="Example@email.com"
+              ></v-text-field>
+              <v-text-field
+                ref="password"
+                label="Password"
+                v-model="input.password"
+                required
+                :rules="[
+                  () => !!input.password || 'This field is required',
+                  (v) =>
+                    (v && v.length >= 5) ||
+                    'Password must contain atleast 5 characters',
+                ]"
+                @click:append="show1 = !show1"
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show1 ? 'text' : 'password'"
+              ></v-text-field>
+              <v-text-field
+                ref="confirmPassword"
+                label="Confirm password"
+                v-model="input.confirmPassword"
+                required
+                :rules="[
+                  () => !!input.confirmPassword || 'This field is required',
+                  () =>
+                    input.password === input.confirmPassword ||
+                    'Password not match',
+                ]"
+                @click:append="show2 = !show2"
+                :append-icon="show2 ? 'mdi-eye' : 'mdi-eye-off'"
+                :type="show2 ? 'text' : 'password'"
+              ></v-text-field>
+            </v-form>
           </v-card-text>
           <v-divider class="mt-12"></v-divider>
           <v-card-actions>
@@ -89,6 +92,7 @@
               :loading="isLoading"
               color="primary"
               text
+              :disabled="!isFormValid"
               @click="submitRegisterForm()"
             >
               Submit
@@ -112,6 +116,7 @@ export default {
       confirmPassword: null,
     },
     formHasErrors: false,
+    isFormValid: false,
     show1: false,
     show2: false,
     isLoading: false,
