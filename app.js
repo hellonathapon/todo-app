@@ -4,11 +4,13 @@ const PORT = process.env.PORT || 5000;
 const db = require("./config/db");
 const errorHandler = require("./config/errorHandler");
 require("dotenv").config();
+const cookieParser = require("cookie-parser");
 const Logger = require("./lib/Logger");
 const morganMiddleware = require("./config/morganMiddleware");
 
 // http logger
 app.use(morganMiddleware);
+app.use(cookieParser());
 
 // CORS middleware
 app.use(function (req, res, next) {

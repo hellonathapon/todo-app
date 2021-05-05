@@ -42,16 +42,23 @@ export default new Vuex.Store({
   },
 
   actions: {
-    fetchTodos: function(context) {
+    fetchTodos: function() {
       //auto triggering when app component is mounted.
-      axios
-        .get(`${process.env.VUE_APP_SERVER_ENDPOINT}/todo`)
-        .then((data) => {
-          context.commit("FETCH_TODOS", data.data);
-        })
-        .catch((err) => {
-          context.commit("SET_SNACKBAR", err.message); // display err message for UX :)
-        });
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`http://localhost:5000/todo`, {
+            withCredentials: true,
+          })
+          .then((data) => {
+            // context.commit("FETCH_TODOS", data.data);
+            console.log(data);
+            resolve(data);
+          })
+          .catch((err) => {
+            //context.commit("SET_SNACKBAR", err.message); // display err message for UX :)
+            reject(err);
+          });
+      });
     },
 
     addTodo: function(context, payload) {
@@ -97,27 +104,34 @@ export default new Vuex.Store({
     },
     submitRegisterForm: function(context, payload) {
       return new Promise((resolve, reject) => {
+        // NOTICE: don't misplace params order :) `axios.post(url, payload, config)`
         axios
-          .post(`${process.env.VUE_APP_SERVER_ENDPOINT}/auth/register`, payload)
+          .post(
+            `${process.env.VUE_APP_SERVER_ENDPOINT}/auth/register`,
+            payload,
+            { withCredentials: true }
+          )
           .then((res) => {
             console.log(res);
-            resolve(res);
+            resolve(res.data.message);
           })
           .catch((err) => {
-            console.error(err);
-            reject(err);
+            // server tasks error comes with `response` object but if client unable to react server then just use built-in error message typically connection lost.
+            reject(err.response ? err.response.data.message : err.message);
           });
       });
     },
     submitLoginForm: function(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${process.env.VUE_APP_SERVER_ENDPOINT}/auth/login`, payload)
+          .post(`${process.env.VUE_APP_SERVER_ENDPOINT}/auth/login`, payload, {
+            withCredentials: true,
+          })
           .then((res) => {
             resolve(res);
           })
           .catch((err) => {
-            reject(err);
+            reject(err.response ? err.response.data.message : err.message);
           });
       });
     },

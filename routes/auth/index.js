@@ -14,12 +14,13 @@ module.exports = function (db) {
         " SELECT email FROM user WHERE email = ?",
         [email]
       );
-
       console.log(rows);
 
       if (rows.length) {
         // this email address is exists try another one maybe :)
-        return res.status(404).send();
+        return res.status(409).send({
+          message: "The email is already exists, try login instead :)",
+        });
       } else {
         // register new user
         // hash password
@@ -32,17 +33,30 @@ module.exports = function (db) {
           [firstName, lastName, email, hashedPwd]
         );
         // generate JWT
-        const token = await jwt.sign(
+        jwt.sign(
           {
             exp: Math.floor(Date.now() / 1000) + 60 * 60,
             data: rows.insertId,
           },
           process.env.JWT_PRIVATE_KEY,
-          { algorithm: "HS256" }
+          { algorithm: "HS256" },
+          function (err, token) {
+            // NEXT: set token in client cookie
+            if (err) {
+              next(err);
+            }
+            console.log("jwt", token);
+            res
+              .cookie("jwt", token, {
+                maxAge: 900000,
+                httpOnly: true,
+                secure: false,
+              })
+              .json({ message: "Register successfully :)" });
+          }
         );
-        // finally response JWT back to client
-        console.log(token);
-        res.status(201).send({ JWT: token });
+
+        // res.status(201).send({ message: "Register successfully!" });
       }
     } catch (err) {
       next(err);

@@ -16,5 +16,9 @@ export default {
     Todos,
     AddTodo,
   },
+  created: function() {
+    // make async fetch todo from server
+    this.$store.dispatch("fetchTodos");
+  },
 };
 </script>

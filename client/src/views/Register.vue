@@ -106,14 +106,28 @@
         <v-alert
           v-model="alertError.status"
           dismissible
-          color="error"
+          color="red lighten-2"
+          dark
           border="left"
           elevation="2"
-          colored-border
           icon="mdi-cloud-alert"
           transition="scale-transition"
         >
           {{ alertError.message }}
+        </v-alert>
+      </div>
+      <div class="alert">
+        <v-alert
+          v-model="alertSuccess.status"
+          dismissible
+          color="success"
+          dark
+          border="left"
+          elevation="2"
+          icon="mdi-cloud-alert"
+          transition="scale-transition"
+        >
+          {{ alertSuccess.message }}
         </v-alert>
       </div>
     </v-row>
@@ -137,6 +151,10 @@ export default {
     show2: false,
     isLoading: false,
     alertError: {
+      status: false,
+      message: null,
+    },
+    alertSuccess: {
       status: false,
       message: null,
     },
@@ -177,12 +195,17 @@ export default {
             email: this.input.email,
             password: this.input.password,
           })
-          .then(() => {
+          .then((res) => {
             this.isLoading = false;
+            this.alertSuccess.message = res;
+            this.alertSuccess.status = true;
+            setTimeout(() => {
+              this.alertSuccess.status = false;
+            }, 5000);
           })
           .catch((err) => {
             this.isLoading = false;
-            this.alertError.message = err.message;
+            this.alertError.message = err;
             this.alertError.status = true;
             setTimeout(() => {
               this.alertError.status = false;

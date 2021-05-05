@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 module.exports = function (db) {
-  router.get("/", (req, res, next) => {
+  router.get("/", checkCookies, (req, res, next) => {
     db.query(" SELECT * FROM todo_list ", (err, rows) => {
       if (err) {
         /**
@@ -48,4 +48,10 @@ module.exports = function (db) {
     );
   });
   return router;
+};
+
+const checkCookies = (req, res, next) => {
+  console.log("hit todo endpoint!");
+  const rawCookies = req.cookies["jwt"];
+  console.log(rawCookies);
 };
