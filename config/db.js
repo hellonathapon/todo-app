@@ -1,6 +1,10 @@
-const mysql = require("mysql");
+const mysql = require("mysql2/promise");
 const Logger = require("../lib/Logger");
 require("dotenv").config();
+
+/**
+ * connection is promisify
+ */
 
 if (process.env.NODE_ENV === "production") {
   const db = mysql.createPool({
@@ -8,6 +12,9 @@ if (process.env.NODE_ENV === "production") {
     user: process.env.DB_USRNAME,
     password: process.env.DB_PWD,
     database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
   });
 
   db.on("connection", function (connection) {
@@ -28,6 +35,9 @@ if (process.env.NODE_ENV === "production") {
     user: process.env.DEV_DB_USRNAME,
     password: process.env.DEV_DB_PWD,
     database: process.env.DEV_DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
   });
 
   db.on("connection", function (connection) {

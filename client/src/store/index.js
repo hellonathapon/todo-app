@@ -98,9 +98,22 @@ export default new Vuex.Store({
     submitRegisterForm: function(context, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post(`${process.env.VUE_APP_SERVER_ENDPOINT}/user/register`, payload)
+          .post(`${process.env.VUE_APP_SERVER_ENDPOINT}/auth/register`, payload)
           .then((res) => {
             console.log(res);
+            resolve(res);
+          })
+          .catch((err) => {
+            console.error(err);
+            reject(err);
+          });
+      });
+    },
+    submitLoginForm: function(context, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post(`${process.env.VUE_APP_SERVER_ENDPOINT}/auth/login`, payload)
+          .then((res) => {
             resolve(res);
           })
           .catch((err) => {
