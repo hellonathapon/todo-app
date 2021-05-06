@@ -126,7 +126,7 @@ export default {
           })
           .catch((err) => {
             this.isLoading = false;
-            this.alertError.message = err.message;
+            this.alertError.message = err;
             this.alertError.status = true;
             setTimeout(() => {
               this.alertError.status = false;

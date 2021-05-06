@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
+import router from "../router";
 
 Vue.use(Vuex);
 
@@ -38,6 +39,9 @@ export default new Vuex.Store({
         status: true,
         message: payload,
       };
+    },
+    REGISTERED_AUTH: function(state, payload) {
+      state.authUser = payload;
     },
   },
 
@@ -112,8 +116,10 @@ export default new Vuex.Store({
             { withCredentials: true }
           )
           .then((res) => {
-            console.log(res);
+            // set auth state
+            context.commit("REGISTERED_AUTH", true);
             resolve(res.data.message);
+            router.push("/profile");
           })
           .catch((err) => {
             // server tasks error comes with `response` object but if client unable to react server then just use built-in error message typically connection lost.
@@ -128,6 +134,7 @@ export default new Vuex.Store({
             withCredentials: true,
           })
           .then((res) => {
+            console.log(res);
             resolve(res);
           })
           .catch((err) => {
