@@ -5,7 +5,7 @@ const db = require("./config/db");
 const errorHandler = require("./config/errorHandler");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
-const Logger = require("./lib/Logger");
+const Logger = require("./utils/Logger");
 const morganMiddleware = require("./config/morganMiddleware");
 
 // http logger

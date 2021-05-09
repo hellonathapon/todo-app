@@ -7,7 +7,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    authUser: false,
+    authUser: window.localStorage.getItem("jwt") || false,
+    user: [],
     todos: [],
     snackbar: {
       status: false,
@@ -41,6 +42,13 @@ export default new Vuex.Store({
       };
     },
     REGISTERED_AUTH: function(state, payload) {
+      state.authUser = payload;
+    },
+    LOGIN_AUTH: function(state, payload) {
+      state.authUser = payload;
+      // set todo user info
+    },
+    TERMINATE_AUTH: function(state, payload) {
       state.authUser = payload;
     },
   },
@@ -134,13 +142,20 @@ export default new Vuex.Store({
             withCredentials: true,
           })
           .then((res) => {
+            // save token in localStorage
             console.log(res);
+            window.localStorage.setItem("jwt", res.data.jwt);
+            context.commit("LOGIN_AUTH", res.data.jwt);
             resolve(res);
+            router.push("/profile");
           })
           .catch((err) => {
             reject(err.response ? err.response.data.message : err.message);
           });
       });
+    },
+    terminateAuth: function(context, payload) {
+      context.commit("TERMINATE_AUTH", payload);
     },
   },
 });

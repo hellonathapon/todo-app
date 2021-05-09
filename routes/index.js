@@ -1,18 +1,11 @@
 const express = require("express");
 const router = express.Router();
+// const { checkCookies } = require('./middlewares');
 
 module.exports = function (db) {
-  router.get("/", checkCookies, (req, res, next) => {
-    db.query(" SELECT * FROM todo_list ", (err, rows) => {
-      if (err) {
-        /**
-         * express auto handle sync err
-         * but for async err, it need to explicitly pass to error handler middleware with next.
-         */
-        next(err);
-      }
-      res.send(rows);
-    });
+  router.get("/", (req, res) => {
+    // fetch public todos
+    res.status(200).send();
   });
 
   router.post("/add", (req, res, next) => {
@@ -50,8 +43,4 @@ module.exports = function (db) {
   return router;
 };
 
-const checkCookies = (req, res, next) => {
-  console.log("hit todo endpoint!");
-  const rawCookies = req.cookies["jwt"];
-  console.log(rawCookies);
-};
+

@@ -1,5 +1,5 @@
 const mysql = require("mysql2/promise");
-const Logger = require("../lib/Logger");
+const Logger = require("../utils/Logger");
 require("dotenv").config();
 
 /**

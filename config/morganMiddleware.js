@@ -1,5 +1,5 @@
 const morgan = require("morgan");
-const Logger = require("../lib/Logger");
+const Logger = require("../utils/Logger");
 
 const stream = {
   // Use the http severity of winston logger

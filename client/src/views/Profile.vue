@@ -183,6 +183,7 @@
 export default {
   name: "Profile",
   data: () => ({
+    amenities: null,
     week: [
       {
         color: "blue",

@@ -13,6 +13,7 @@
 
     <v-menu
       v-model="menu"
+      v-if="checkUser"
       :close-on-content-click="false"
       :nudge-width="200"
       offset-x
@@ -94,13 +95,8 @@ export default {
     menu: false,
     selectedItem: 0,
     items: [
-      { text: "Profile", icon: "mdi-folder" },
-      { text: "Logout", icon: "mdi-account-multiple" },
-      { text: "Starred", icon: "mdi-star" },
-      { text: "Recent", icon: "mdi-history" },
-      { text: "Offline", icon: "mdi-check-circle" },
-      { text: "Uploads", icon: "mdi-upload" },
-      { text: "Backups", icon: "mdi-cloud-upload" },
+      { text: "Profile", icon: "mdi-account" },
+      { text: "Logout", icon: "mdi-star" },
     ],
   }),
   computed: {
