@@ -5,7 +5,8 @@ const router = express.Router();
 module.exports = function (db) {
   router.get("/", (req, res) => {
     // fetch public todos
-    res.status(200).send();
+    console.log('hit / endpoint')
+    res.status(200).send('got you');
   });
 
   router.post("/add", (req, res, next) => {

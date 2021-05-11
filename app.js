@@ -2,16 +2,17 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5000;
 const db = require("./config/db");
-const errorHandler = require("./config/errorHandler");
 require("dotenv").config();
 const cookieParser = require("cookie-parser");
 const Logger = require("./utils/Logger");
 const morganMiddleware = require("./config/morganMiddleware");
+const apiErrorHandler = require("./errorHandles/apiErrorHandler");
+const cors = require('cors');
 
 // http logger
 app.use(morganMiddleware);
 app.use(cookieParser());
-
+// app.use(cors());
 // CORS middleware
 app.use(function (req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
@@ -39,6 +40,6 @@ if (process.env.NODE_ENV === "production") {
 }
 
 // Error handling middleware
-app.use(errorHandler);
+app.use(apiErrorHandler);
 
 app.listen(PORT, Logger.info(`Server is running on port ${PORT}`));

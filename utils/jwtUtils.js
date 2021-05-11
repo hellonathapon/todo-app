@@ -6,7 +6,7 @@ exports.signAccessToken = async (userId) => {
   const secret = process.env.JWT_ACCESS_PRIVATE_KEY;
   const options = {
     algorithm: "HS256",
-    expiresIn: "20s",
+    expiresIn: "5m",
     issuer: "nathapon",
   };
   return new Promise((resolve, reject) => {
