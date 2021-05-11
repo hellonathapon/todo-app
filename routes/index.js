@@ -1,12 +1,15 @@
 const express = require("express");
 const router = express.Router();
-// const { checkCookies } = require('./middlewares');
 
 module.exports = function (db) {
-  router.get("/", (req, res) => {
+  router.get("/", async (req, res) => {
     // fetch public todos
-    console.log('hit / endpoint')
-    res.status(200).send('got you');
+    try {
+      const [rows] = await db.execute("SELECT * from todos");
+      res.status(200).json({todos: rows});
+    }catch(err) {
+      throw err;
+    }
   });
 
   router.post("/add", (req, res, next) => {

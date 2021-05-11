@@ -9,7 +9,7 @@ module.exports = function (db) {
 
   // POST:register
   router.post("/register", checkRegisterCredentials, async (req, res) => {
-    const {firstName, lastName, email, password} = req.credentials;
+    const {firstName, lastName, username, email, password} = req.credentials;
 
     try {
       // check if email already exists
@@ -20,18 +20,17 @@ module.exports = function (db) {
        * (3). error from executing query
        * the 1 and 2 should be explicitly handled, 3 should pass to errorHandler. 
        */
-      const [rows] = await db.execute(" SELECT email FROM user WHERE email = ?",[email]);
+      const [rows] = await db.execute(" SELECT email FROM users WHERE email = ?",[email]);
 
       if (rows.length) {
-        // ?: should route has next callback to pass async error to ?
-        // this is not error by the way is just [data]
         return res.status(409).send({message: "The email address is already exists, try login instead"});
       } else {
         // hash password
         const hashedPassword = await hash(password);
 
+        // TODO: generate uuid for id;
         // insert into db
-        const [ rows, fields, ] = await db.execute("INSERT INTO user (first_name, last_name, email, password) values (?,?,?,?)",[firstName, lastName, email, hashedPassword]);
+        const [ rows, fields, ] = await db.execute("INSERT INTO users (first_name, last_name, username, email, password) values (?,?,?,?)",[firstName, lastName, username, email, hashedPassword]);
         
         // sign a jwt
         const token = await signAccessToken(rows.insertId);
@@ -56,7 +55,7 @@ module.exports = function (db) {
     const { email, password } = req.credentials;
     // check if email already exists
     try {
-      const [rows] = await db.execute("SELECT * FROM user WHERE email = ?", [email,]);
+      const [rows] = await db.execute("SELECT * FROM users WHERE email = ?", [email,]);
 
       if(!rows.length) {
         return res.status(401).send({ message: "Email not found!" });
@@ -81,7 +80,7 @@ module.exports = function (db) {
   router.post("/profile", checkToken, async (req, res) => {
     const userId = req.validateToken;
     try {
-      const [rows] = await db.execute("SELECT a.first_name, a.last_name, a.email, b.todo_text FROM user a JOIN todo_list b ON a.userId=b.creatorId WHERE a.userId=?", [parseInt(userId)]);
+      const [rows] = await db.execute("SELECT a.first_name, a.last_name, a.email, b.todo_text FROM users a JOIN todos b ON a.userId=b.creatorId WHERE a.userId=?", [parseInt(userId)]);
       res.status(200).send(rows);
     }
     catch(err) {

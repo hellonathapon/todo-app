@@ -7,7 +7,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    authUser: window.localStorage.getItem("jwt") || false,
+    // authUser: window.localStorage.getItem("jwt") || false,
+    authUser: true,
     user: [],
     todos: [],
     snackbar: {
