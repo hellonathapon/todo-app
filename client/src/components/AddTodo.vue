@@ -1,9 +1,9 @@
 <template>
   <div class="text-center">
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="formModal" width="500">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          v-if="checkUser"
+          v-if="checkAuthUser"
           class="toggle-icon"
           color="primary"
           dark
@@ -22,37 +22,33 @@
         <v-form v-model="isFormValid" v-on:submit.prevent>
           <v-card-text>
             <v-text-field
-              ref="title"
-              label="Title"
+              ref="text"
+              label="Text"
               v-model="input.title"
               required
-              counter="50"
+              counter="80"
               :rules="[
                 () => !!input.title || 'This field is required',
-                (v) => input.title.length <= 50 || 'React maximun title length',
+                () =>
+                  (!!input.title && input.title.length <= 80) ||
+                  'Text must be less than 80 characters',
               ]"
             ></v-text-field>
-            <v-textarea
-              v-model="input.body"
-              label="Text"
-              counter="120"
-              maxlength="120"
-              full-width
-              single-line
-            ></v-textarea>
 
             <v-row>
               <!-- date -->
               <v-col cols="6">
                 <v-dialog
-                  ref="dialog"
-                  v-model="modal"
+                  ref="dateBox"
+                  v-model="dateModal"
                   :return-value.sync="date"
                   persistent
                   width="290px"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
+                      ref="date"
+                      :rules="[(v) => !!v || 'Due Date is required']"
                       v-model="date"
                       label="Due Date"
                       prepend-icon="mdi-calendar"
@@ -63,13 +59,13 @@
                   </template>
                   <v-date-picker v-model="date" scrollable>
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="modal = false">
+                    <v-btn text color="primary" @click="dateModal = false">
                       Cancel
                     </v-btn>
                     <v-btn
                       text
                       color="primary"
-                      @click="$refs.dialog.save(date)"
+                      @click="$refs.dateBox.save(date)"
                     >
                       OK
                     </v-btn>
@@ -80,14 +76,16 @@
               <!-- time -->
               <v-col cols="6">
                 <v-dialog
-                  ref="dialog"
-                  v-model="modal2"
+                  ref="timeBox"
+                  v-model="timeModal"
                   :return-value.sync="time"
                   persistent
                   width="290px"
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
+                      ref="time"
+                      :rules="[(v) => !!v || 'Due Time is required']"
                       v-model="time"
                       label="Due Time"
                       prepend-icon="mdi-clock-time-four-outline"
@@ -96,15 +94,15 @@
                       v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-time-picker v-if="modal2" v-model="time" full-width>
+                  <v-time-picker v-if="timeModal" v-model="time" full-width>
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="modal2 = false">
+                    <v-btn text color="primary" @click="timeModal = false">
                       Cancel
                     </v-btn>
                     <v-btn
                       text
                       color="primary"
-                      @click="$refs.dialog.save(time)"
+                      @click="$refs.timeBox.save(time)"
                     >
                       OK
                     </v-btn>
@@ -123,7 +121,7 @@
               text
               type="submit"
               :disabled="!isFormValid"
-              @click="submitLoginForm()"
+              @click="AddTodo()"
             >
               Submit
             </v-btn>
@@ -135,100 +133,93 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "AddTodo",
   data: () => ({
-    date: new Date().toISOString().substr(0, 10),
-    modal: false,
-    time: "18:00",
-    menu2: false,
-    modal2: false,
+    date: null,
+    time: null,
+    formModal: false,
+    dateModal: false,
+    timeModal: false,
     input: {
-      title: null,
-      body: null,
-      dueDate: null,
+      text: null,
     },
-    dialog: false,
-    formValid: false,
-    datepickerMenu: false,
-    btnLoading: false,
-    rules: {
-      todoRule: [(v) => !!v || "Todo is required"],
-      creatorRule: [(v) => !!v || "Creator name is required"],
-      dateRule: [(v) => !!v || "Due date is required"],
-    },
+    isLoading: false,
+    isFormValid: false,
+    formHasErrors: true,
   }),
   computed: {
-    checkUser: function() {
-      return this.$store.state.authUser;
+    form() {
+      return {
+        text: this.input.title,
+        date: this.date,
+        time: this.time,
+      };
     },
+    ...mapState({
+      checkAuthUser: function() {
+        return this.$store.state.user.user.isAuth;
+      },
+      user: function() {
+        return this.$store.state.user.user.data;
+      },
+    }),
   },
 
   methods: {
-    submitTodo() {
-      if (this.$refs.form.validate()) {
-        // check form validation.
-        this.btnLoading = true;
-        // console.log(this.input.date)
-        console.log(new Date(this.input.date));
+    AddTodo: function() {
+      this.formHasErrors = false;
+      this.isLoading = true;
+
+      Object.keys(this.form).forEach((f) => {
+        // check if every field is contain a value
+        if (!this.form[f]) {
+          this.formHasErrors = true;
+        }
+        // check if any field doesn't pass its own validation then entire form has error :)
+        if (!this.$refs[f].validate()) {
+          this.formHasErrors = true;
+        }
+      });
+
+      if (!this.formHasErrors) {
+        // if form is valid then dispatch action
+
         this.$store
-          .dispatch("addTodo", {
-            text: this.input.text,
-            creator: this.input.creator,
-            date: this.input.date,
-            isDone: 0,
+          .dispatch("todos/addTodo", {
+            text: this.input.title,
+            due_date: this.date,
+            created_at: new Date().toLocaleDateString(),
+            creatorId: this.user.id,
+            first_name: this.user.first_name,
+            last_name: this.user.last_name,
           })
           .then(() => {
-            this.btnLoading = false;
-            this.dialog = false;
+            this.isLoading = false;
+            // this.alertSuccess.message = res;
+            // this.alertSuccess.status = true;
+            // setTimeout(() => {
+            //   this.alertSuccess.status = false;
+            // }, 5000);
+
+            // clear input
+            this.input.text = null;
+            this.date = null;
+            this.time = null;
+            this.formModal = false;
           })
-          .catch(() => (this.btnLoading = false));
+          .catch(() => {
+            this.isLoading = false;
+            // this.alertError.message = err;
+            // this.alertError.status = true;
+            // setTimeout(() => {
+            //   this.alertError.status = false;
+            // }, 5000);
+          });
       }
     },
-
-    // formatDate() {
-    //   const today = "2021-05-02";
-    //   const n = new Date(today);
-    //   const daysOfWeek = ["a", "b", "c", "d", "e", "f", "r"];
-    //   const monthNames = [
-    //     "Jan",
-    //     "Fab",
-    //     "Mar",
-    //     "Apr",
-    //     "May",
-    //     "Jun",
-    //     "Jul",
-    //     "Aug",
-    //     "Sep",
-    //     "Oct",
-    //     "Nov",
-    //     "Dec",
-    //   ];
-
-    //   const day = n.getDay();
-    //   let i = 0;
-    //   let dayOfToday = "";
-    //   while (i < daysOfWeek.length) {
-    //     if (day === i) {
-    //       dayOfToday = daysOfWeek[i];
-    //     }
-    //     i++;
-    //   }
-
-    //   let q = 0;
-    //   const date = n.getDate();
-    //   const month = n.getMonth();
-    //   let thisMonth = "";
-
-    //   while (q < monthNames.length) {
-    //     if (month === q) {
-    //       thisMonth = monthNames[q];
-    //     }
-    //     q++;
-    //   }
-
-    //   console.log(dayOfToday, date, thisMonth);
-    // },
   },
 };
 </script>

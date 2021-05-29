@@ -58,11 +58,9 @@
       <div class="alert">
         <v-alert
           v-model="alertError.status"
+          type="error"
           dismissible
-          color="error"
-          border="left"
           elevation="2"
-          colored-border
           icon="mdi-cloud-alert"
           transition="scale-transition"
         >
@@ -117,12 +115,13 @@ export default {
         // if form is valid then dispatch action
         this.isLoading = true;
         this.$store
-          .dispatch("submitLoginForm", {
+          .dispatch("user/submitLoginForm", {
             email: this.input.email,
             password: this.input.password,
           })
           .then(() => {
             this.isLoading = false;
+            this.$router.push("/profile");
           })
           .catch((err) => {
             this.isLoading = false;

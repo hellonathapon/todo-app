@@ -15,6 +15,10 @@ export default {
   components: {
     NavBar,
   },
+  methods: {},
+  created: function() {
+    this.$store.dispatch("user/verifyUser");
+  },
 };
 </script>
 

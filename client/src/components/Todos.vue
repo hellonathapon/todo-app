@@ -1,149 +1,117 @@
 <template>
   <v-container>
     <v-row class="text-center" justify="center">
-      <v-col cols="12" lg="12" style="margin-top: 100px;">
+      <!-- <v-col cols="12" lg="12" style="margin-top: 100px;">
+        <BulletListLoader />
+      </v-col> -->
+      <v-col cols="12" lg="12" style="margin-top: 80px;">
         <v-list two-line>
-          <v-list-item-group active-class="pink--text" multiple>
-            <template v-for="(item, index) in items">
-              <v-list-item :key="item.title" style="text-align: start;">
-                <template v-slot:default="{ active }">
-                  <v-list-item-avatar style="margin-right: 15px;">
-                    <v-img :src="item.avatar"></v-img>
-                  </v-list-item-avatar>
+          <template v-for="item in todos">
+            <v-list-item :key="item.id" style="text-align: start;">
+              <!-- <template v-slot:default="{ active }"> -->
+              <div class="user-header">
+                <v-avatar
+                  :color="randomNameColorTag(item.first_name)"
+                  style="margin-right: 15px;"
+                >
+                  <span class="white--text headline">{{
+                    mtdLetterAvatar(item.first_name)
+                  }}</span>
+                </v-avatar>
+              </div>
 
-                  <v-list-item-content>
-                    <v-list-item-title v-text="item.title"></v-list-item-title>
+              <v-list-item-content>
+                <div class="article">
+                  <small
+                    >@<b>{{ item.first_name }}{{ item.last_name }}</b></small
+                  >
+                  <small class="date ml-1">{{
+                    readableDateString(item.created_at)
+                  }}</small>
+                </div>
 
-                    <v-list-item-subtitle
-                      class="text--primary"
-                      v-text="item.headline"
-                    ></v-list-item-subtitle>
+                <v-list-item-title
+                  class="my-1"
+                  v-text="item.text"
+                ></v-list-item-title>
+                <small
+                  >Due Date {{ new Date(item.due_date).toDateString() }}</small
+                >
+              </v-list-item-content>
 
-                    <v-list-item-subtitle
-                      v-text="item.subtitle"
-                    ></v-list-item-subtitle>
-                  </v-list-item-content>
+              <v-list-item-action>
+                <v-icon
+                  v-if="checkDueDate(item.due_date)"
+                  color="grey lighten-1"
+                >
+                  mdi-checkbox-marked-circle-outline
+                </v-icon>
 
-                  <v-list-item-action>
-                    <v-list-item-action-text
-                      v-text="item.action"
-                    ></v-list-item-action-text>
-
-                    <v-icon v-if="!active" color="grey lighten-1">
-                      mdi-checkbox-marked-circle-outline
-                    </v-icon>
-
-                    <v-icon v-else color="yellow darken-3">
-                      mdi-checkbox-marked-circle
-                    </v-icon>
-                  </v-list-item-action>
-                </template>
-              </v-list-item>
-
-              <v-divider
-                v-if="index < items.length - 1"
-                :key="index"
-              ></v-divider>
-            </template>
-          </v-list-item-group>
+                <v-icon v-else color="green">
+                  mdi-checkbox-marked-circle
+                </v-icon>
+              </v-list-item-action>
+              <!-- </template> -->
+            </v-list-item>
+            <!-- <v-divider :key="i"></v-divider> -->
+          </template>
         </v-list>
       </v-col>
-
-      <!-- <p v-if="!getTodos.length">No todo found :)</p>
-        <v-card
-          v-else
-          v-for="i in getTodos"
-          class="todo-card pa-3"
-          :key="i.id"
-          v-on:click="markAsDone(i.id)"
-          outlined
-        >
-          <div class="d-flex left">
-            <v-icon>
-              mdi-check-circle-outline
-            </v-icon>
-            <div class="d-flex flex-column align-start ml-3">
-              <p class="text-center title" v-bind:class="{ done: i.isDone }">
-                {{ i.text }}
-              </p>
-              <small>{{ i.creator }}</small>
-            </div>
-          </div>
-
-          <div class="right">
-            <v-btn v-if="i.isDone" icon color="error">
-              <v-icon v-on:click="deleteTodo(i.id)"
-                >mdi-trash-can-outline</v-icon
-              >
-            </v-btn>
-            <p class="text-center" v-else>{{ i.date }}</p>
-          </div>
-        </v-card> -->
     </v-row>
   </v-container>
 </template>
 
 <script>
+import { mapState } from "vuex";
+// import { BulletListLoader } from "vue-content-loader";
+
 export default {
   name: "Todos",
-  components: {},
+  components: {
+    // BulletListLoader,
+  },
   data: () => ({
     dialog: false,
-    items: [
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        title: "Brunch this weekend?",
-        subtitle: `I'll be in your neighborhood doing errands this weekend. Do you want to hang out?`,
-        action: "23 June",
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-        title: "Summer BBQ",
-        subtitle: `Wish I could come, but I'm out of town this weekend.`,
-        action: "23 June",
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-        title: "Oui oui",
-        subtitle: "Do you have Paris recommendations? Have you ever been?",
-        action: "23 June",
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-        title: "Birthday gift",
-        subtitle:
-          "Have any ideas about what we should get Heidi for her birthday?",
-        action: "23 June",
-      },
-      {
-        avatar: "https://cdn.vuetifyjs.com/images/lists/5.jpg",
-        title: "Recipe to try",
-        subtitle:
-          "We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
-        action: "23 June",
-      },
-    ],
   }),
-  methods: {
-    markAsDone(id) {
-      this.$store.dispatch("markAsDone", { id });
-    },
-    deleteTodo(id) {
-      this.$store.dispatch("deleteTodo", { id });
-    },
-    /**
-     * @COMPARE DATE FEATURE.
-     * compare todo overdue date with today.
-     */
-    // compareDates: function(dateString){
-    //   const today = new Date().getTime()
-    //   const todoDate = new Date(dateString).getTime();
-    //   return todoDate < today;
-    // }
-  },
   computed: {
-    getTodos: function() {
-      return this.$store.state.todos;
+    ...mapState("todos", ["todos"]),
+  },
+  methods: {
+    mtdLetterAvatar: (name) => name[0].toUpperCase(),
+    randomNameColorTag(firstName) {
+      if (firstName) {
+        if (firstName[0] == "N") {
+          return "teal";
+        } else {
+          return "red";
+        }
+      }
+    },
+    readableDateString(d) {
+      const today = new Date().getTime();
+      const millisecondsInDay = 1000 * 60 * 60 * 24;
+      const difTime = today - new Date(d).getTime();
+      const difDay = Math.floor(difTime / millisecondsInDay);
+      if (difDay === 0) {
+        return "Today";
+      } else if (difDay === 1) {
+        return "Yesterday";
+      } else if (difDay > 1 <= 7) {
+        return "This week";
+      } else {
+        return new Date(d).toLocaleDateString();
+      }
+    },
+    checkDueDate(d) {
+      const today = new Date().getTime();
+      const millisecondsInDay = 1000 * 60 * 60 * 24;
+      const difTime = new Date(d).getTime() - today;
+      const difDay = Math.floor(difTime / millisecondsInDay);
+      if (difDay === 0) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
 };
@@ -193,5 +161,12 @@ export default {
   /* .overdueText{
     color: crimson;
   } */
+}
+.article {
+  display: flex;
+  align-items: center;
+  & > * {
+    display: block;
+  }
 }
 </style>

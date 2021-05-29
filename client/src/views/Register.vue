@@ -39,19 +39,6 @@
                 ]"
               ></v-text-field>
               <v-text-field
-                ref="username"
-                label="Username"
-                v-model="input.username"
-                required
-                counter="30"
-                :rules="[
-                  () => !!input.username || 'This field is required',
-                  () =>
-                    (!!input.lastName && input.lastName.length <= 30) ||
-                    'Username must be less than 25 characters',
-                ]"
-              ></v-text-field>
-              <v-text-field
                 ref="email"
                 label="Email Address"
                 v-model="input.email"
@@ -119,9 +106,8 @@
         <v-alert
           v-model="alertError.status"
           dismissible
-          color="red lighten-2"
+          type="error"
           dark
-          border="left"
           elevation="2"
           icon="mdi-cloud-alert"
           transition="scale-transition"
@@ -154,7 +140,6 @@ export default {
     input: {
       firstName: null,
       lastName: null,
-      username: null,
       email: null,
       password: null,
       confirmPassword: null,
@@ -178,7 +163,6 @@ export default {
       return {
         firstName: this.input.firstName,
         lastName: this.input.lastName,
-        username: this.input.username,
         email: this.input.email,
         password: this.input.password,
         confirmPassword: this.input.confirmPassword,
@@ -204,7 +188,7 @@ export default {
         // if form is valid then dispatch action
         this.isLoading = true;
         this.$store
-          .dispatch("submitRegisterForm", {
+          .dispatch("user/submitRegisterForm", {
             firstName: this.input.firstName,
             lastName: this.input.lastName,
             email: this.input.email,
@@ -216,7 +200,11 @@ export default {
             this.alertSuccess.status = true;
             setTimeout(() => {
               this.alertSuccess.status = false;
-            }, 5000);
+            }, 2000);
+            // push to login
+            setTimeout(() => {
+              this.$router.push("/login");
+            }, 1000);
           })
           .catch((err) => {
             this.isLoading = false;

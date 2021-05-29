@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar color="white" absolute elevation="0">
+  <v-app-bar fixed outlined elevation="0" class="appbar">
     <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
 
     <router-link to="/" class="d-flex align-center logo-link">
@@ -23,44 +23,34 @@
           v-if="checkUser"
           v-bind="attrs"
           v-on="on"
-          color="primary"
+          :color="randomNameColorTag(userData.first_name)"
           size="40"
         >
-          <span class="white--text headline">TJ</span>
+          <span class="white--text headline">{{
+            mtdLetterAvatar(userData.first_name)
+          }}</span>
         </v-avatar>
       </template>
 
       <v-card>
-        <v-list>
-          <v-list-item>
-            <v-list-item-avatar>
-              <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
-            </v-list-item-avatar>
-
-            <v-list-item-content class="text-start">
-              <v-list-item-title>Nathapon</v-list-item-title>
-              <v-list-item-subtitle>Founder of TODOHOUSE</v-list-item-subtitle>
-            </v-list-item-content>
-
-            <v-list-item-action>
-              <!-- <v-btn :class="fav ? 'red--text' : ''" icon @click="fav = !fav">
-                <v-icon>mdi-heart</v-icon>
-              </v-btn> -->
-            </v-list-item-action>
-          </v-list-item>
-        </v-list>
-
-        <v-divider></v-divider>
-
         <v-list nav dense>
           <v-list-item-group v-model="selectedItem" color="primary">
-            <v-list-item v-for="(item, i) in items" :key="i">
+            <v-list-item to="/profile">
               <v-list-item-icon>
-                <v-icon v-text="item.icon"></v-icon>
+                <v-icon>mdi-account</v-icon>
               </v-list-item-icon>
 
               <v-list-item-content class="text-start">
-                <v-list-item-title v-text="item.text"></v-list-item-title>
+                <v-list-item-title>Profile</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item @click="logout">
+              <v-list-item-icon>
+                <v-icon>mdi-logout</v-icon>
+              </v-list-item-icon>
+
+              <v-list-item-content class="text-start">
+                <v-list-item-title>Logout</v-list-item-title>
               </v-list-item-content>
             </v-list-item>
           </v-list-item-group>
@@ -88,26 +78,49 @@
 
 <script>
 // @ is an alias to /src
+import { mapState } from "vuex";
 
 export default {
   name: "Navbar",
   data: () => ({
     menu: false,
     selectedItem: 0,
-    items: [
-      { text: "Profile", icon: "mdi-account" },
-      { text: "Logout", icon: "mdi-star" },
-    ],
   }),
   computed: {
-    checkUser: function() {
-      return this.$store.state.authUser;
+    ...mapState({
+      checkUser: function() {
+        return this.$store.state.user.user.isAuth;
+      },
+      userData: function() {
+        return this.$store.state.user.user.data;
+      },
+    }),
+  },
+  methods: {
+    logout: function() {
+      this.$store.dispatch("user/logout");
+    },
+    mtdLetterAvatar: (name) => (name ? name[0].toUpperCase() : null),
+    randomNameColorTag(firstName) {
+      if (firstName) {
+        if (firstName[0] == "N") {
+          return "teal";
+        } else {
+          return "red";
+        }
+      }
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.appbar {
+  box-shadow: 0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%),
+    0 1px 10px 0 rgb(0 0 0 / 12%) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.12) !important;
+  background-color: #fff !important;
+}
 .logo-link {
   text-decoration: none;
   .logo-icon {
